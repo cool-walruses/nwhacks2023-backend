@@ -1,3 +1,5 @@
+import os
+import openai
 from flask import Flask
 
 
@@ -28,6 +30,12 @@ def create_app(test_config=None):
     @app.route('/')
     def hello():
         return 'Hello, World!'
+
+    @app.route('/openai')
+    def openAiHandler():
+        request = "\"\"\"\nA function that does insertion sort.\n\"\"\""
+        openai.api_key = "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"
+        return openai.Completion.create(model="code-cushman-001", prompt=request, temperature=0.2, max_tokens=1024)
 
     return app
 
