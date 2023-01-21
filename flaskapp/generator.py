@@ -3,6 +3,8 @@ import flaskapp.constants as const
 from http import HTTPStatus
 from flask import Blueprint, jsonify, request
 
+import pdb
+
 bp = Blueprint('generator', __name__, url_prefix='/generator')
 
 @bp.route('/generate', methods=['POST'])
@@ -34,9 +36,9 @@ def generate():
         
         """
         # Get information from request
-        programming_language = request.form['programming_language']
-        source_language = request.form['language']
-        prompt = request.form['prompt']
+        programming_language = request.json['programming_language']
+        source_language = request.json['source_language']
+        prompt = request.json['prompt']
 
         # Make request to openai API
         response = openai.Completion.create(
@@ -46,11 +48,12 @@ def generate():
             max_tokens=const.MAX_TOKENS
         )
 
-        return jsonify({'code', response.text}), HTTPStatus.OK
+        code_content = response["choices"][0]["text"] 
+        return jsonify(code=code_content), HTTPStatus.OK
 
 def generate_code_prompt(programming_language, prompt):
-    return "\n".join(
-            const.LANG_CONSTANTS[programming_language].startToken,
+    return "\n".join([
+            const.LANG_COMMENTS[programming_language].startToken,
             f"In {programming_language}, {prompt}",
-            const.LANG_CONSTANTS[programming_language].endToken
-        )
+            const.LANG_COMMENTS[programming_language].endToken
+        ])
