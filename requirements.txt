@@ -1,3 +1,4 @@
 Flask
 openai
 chardet==3.0.4
+python-dotenv

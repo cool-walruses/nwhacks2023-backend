@@ -5,7 +5,7 @@ from flask import Blueprint, jsonify, request
 
 bp = Blueprint('generator', __name__, url_prefix='/generator')
 
-@bp.route('/generate', methods=('POST'))
+@bp.route('/generate', methods=['POST'])
 def generate():
     if request.method == 'POST':
         """
