@@ -4,10 +4,12 @@ from flaskapp.helpers.translation import generate_response
 from flaskapp.helpers.exceptions import IllegalContentError
 from http import HTTPStatus
 from flask import Blueprint, jsonify, request
+from flask_cors import cross_origin
 
 bp = Blueprint('generator', __name__, url_prefix='/generator')
 
 @bp.route('/generate', methods=['POST'])
+@cross_origin()
 def generate():
     if request.method == 'POST':
         """
