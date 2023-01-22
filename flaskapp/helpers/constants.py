@@ -15,8 +15,7 @@ class CommentWrapper:
 CODEX_MODEL_PARAMS = {
     'model' : 'code-cushman-001',
     'temperature' : 0.2,
-    'max_tokens' : 1900,
-    'n' : 4
+    'max_tokens' : 1900
 }
 
 LANGUAGE_MODEL_PARAMS = {

@@ -4,6 +4,8 @@ from flaskapp.helpers.exceptions import IllegalContentError
 
 def generate_response(programming_language, prompt):
     too_long_boolean = True
+    MAXRUN = 3
+    currentRun = 0
 
     # Check for abusive content
     content_check(prompt)
@@ -27,23 +29,21 @@ def generate_response(programming_language, prompt):
         content_check(prompt)
 
     # Make request to openai API
-    response = openai.Completion.create(
-        prompt=generate_code_prompt(programming_language, prompt),
-        **const.CODEX_MODEL_PARAMS
-    )
-
-    current_text = ""
     too_long = "\nThe code you are trying to generate is too long. Please break it down into simpler tasks or try again.\n"
-    for i in range(3):
-        if response["choices"][i]["finish_reason"] == "stop":
-            current_text = response["choices"][i]["text"]
+    current_text = ""
+    while currentRun < MAXRUN:
+        response = openai.Completion.create(
+            prompt=generate_code_prompt(programming_language, prompt),
+            **const.CODEX_MODEL_PARAMS
+        )
+        if response["choices"][0]["finish_reason"] == "stop":
+            current_text = response["choices"][0]["text"]
             too_long_boolean = False
             break
+        currentRun = currentRun + 1
 
     if too_long_boolean:
         current_text = too_long
-
-    print(current_text)
 
     # Translate back to original language if needed
     if source_language != 'English':
@@ -59,8 +59,6 @@ def generate_response(programming_language, prompt):
                 **const.ENGLISH_TO_ORIGINAL_LANGUAGE_MODEL_PARAMS
             )
             current_text = response["choices"][0]["text"]
-
-    print(current_text)
 
     return current_text
 
