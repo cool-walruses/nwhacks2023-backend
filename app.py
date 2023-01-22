@@ -30,7 +30,7 @@ def create_app(test_config=None):
     from flaskapp import generator
 
     # a simple page that says hello
-    @app.route('/')
+    @app.route('/test')
     def hello():
         return 'Hello, World!'
 

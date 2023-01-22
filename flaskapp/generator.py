@@ -36,20 +36,33 @@ def generate():
         
         """
         # Get information from request
-        programming_language = request.json['programming_language']
-        source_language = request.json['source_language']
+        programming_language = request.json['programming_language'].title()
+        source_language = request.json['source_language'].title()
         prompt = request.json['prompt']
+
+        # Translate from source language
+        if source_language != 'English':
+            response = openai.Completion.create(
+                prompt=generate_language_translation_prompt(source_language, prompt),
+                **const.LANGUAGE_MODEL_PARAMS
+            )
+            prompt = response["choices"][0]["text"]
 
         # Make request to openai API
         response = openai.Completion.create(
-            model=const.CODEX_MODEL,
             prompt=generate_code_prompt(programming_language, prompt),
-            temperature=const.TEMPERATURE,
-            max_tokens=const.MAX_TOKENS
+            **const.CODEX_MODEL_PARAMS
         )
 
-        code_content = response["choices"][0]["text"] 
+        code_content = response["choices"][0]["text"]
+        #code_content = bytes(response["choices"][0]["text"], "utf-8").decode('unicode_escape')
         return jsonify(code=code_content), HTTPStatus.OK
+
+def generate_language_translation_prompt(source_language, prompt):
+    return "\n".join([
+        f"Translate the following from {source_language} to English:",
+        f"{prompt}"
+    ])
 
 def generate_code_prompt(programming_language, prompt):
     return "\n".join([

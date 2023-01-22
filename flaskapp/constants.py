@@ -12,22 +12,27 @@ class CommentWrapper:
     def endToken(self):
         return self.__endToken
 
-CODEX_MODEL = "code-davinci-002" 
-MAX_TOKENS = 1024
-TEMPERATURE = 0.6
-
-LANG_COMMENTS = {
-    "python" : CommentWrapper('"""', '"""'),
-    "java" : CommentWrapper('/*', '*/'),
-    "javascript" : CommentWrapper('/*', '*/'),
-    "c" : CommentWrapper('/*', '*/'),
-    "c++" : CommentWrapper('/*', '*/'),
-    "c#" : CommentWrapper('/*', '*/'),
-    "golang" : CommentWrapper('/*', '*/'),
-    "php" : CommentWrapper('/*', '*/'),
-    "mysql" : CommentWrapper('/*', '*/'),
-    "html" : CommentWrapper('<!--', '-->'),
-    "css" : CommentWrapper('/*', '*/'),
-    "react" : CommentWrapper('/*', '*/')
+CODEX_MODEL_PARAMS = {
+    'model' : 'code-davinci-002',
+    'temperature' : 0.6,
+    'max_tokens' : 1024
 }
 
+LANGUAGE_MODEL_PARAMS = {
+    'model' : 'text-davinci-003',
+    'temperature' : 0.6,
+    'max_tokens' : 1024
+}
+
+LANG_COMMENTS = {
+    "Python" : CommentWrapper('"""', '"""'),
+    "Java" : CommentWrapper('/*', '*/'),
+    "Javascript" : CommentWrapper('/*', '*/'),
+    "C" : CommentWrapper('/*', '*/'),
+    "C++" : CommentWrapper('/*', '*/'),
+    "C#" : CommentWrapper('/*', '*/'),
+    "Golang" : CommentWrapper('/*', '*/'),
+    "Php" : CommentWrapper('/*', '*/'),
+    "Html" : CommentWrapper('<!--', '-->'),
+    "Css" : CommentWrapper('/*', '*/')
+}
