@@ -6,7 +6,6 @@ def generate_response(programming_language, source_language, prompt):
 
     # Check for abusive content
     content_check(prompt)
-    print("HERE 1")
 
     # Translate from source language
     if source_language != 'English':
@@ -18,7 +17,6 @@ def generate_response(programming_language, source_language, prompt):
 
         # Double check for abusive content after translation
         content_check(prompt)
-        print("HERE 2")
 
     # Make request to openai API
     response = openai.Completion.create(
