@@ -31,6 +31,8 @@ def generate_response(programming_language, source_language, prompt):
             **const.ENGLISH_TO_ORIGINAL_LANGUAGE_MODEL_PARAMS
         )
 
+    return response
+
 def content_check(prompt):
     response = openai.Moderation.create(input=prompt)
     if response["results"][0]["flagged"]:
