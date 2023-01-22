@@ -13,21 +13,24 @@ class CommentWrapper:
         return self.__endToken
 
 CODEX_MODEL_PARAMS = {
-    'model' : 'code-davinci-002',
+    'model' : 'code-cushman-001',
     'temperature' : 0.6,
-    'max_tokens' : 1024
+    'max_tokens' : 1024,
+    'n' : 2
 }
 
 LANGUAGE_MODEL_PARAMS = {
     'model' : 'text-davinci-003',
     'temperature' : 0.6,
-    'max_tokens' : 1024
+    'max_tokens' : 1024,
+    'n' : 2
 }
 
 ENGLISH_TO_ORIGINAL_LANGUAGE_MODEL_PARAMS = {
     'model' : 'text-davinci-003',
     'temperature' : 0,
-    'max_tokens' : 1024
+    'max_tokens' : 1024,
+    'n' : 2
 }
 
 LANG_COMMENTS = {

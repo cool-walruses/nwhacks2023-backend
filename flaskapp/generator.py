@@ -49,7 +49,7 @@ def generate():
 
         try:
             response = generate_response(programming_language, prompt)
-            code_content = response["choices"][0]["text"].strip()
+            code_content = response.strip()
             return jsonify(code=code_content), HTTPStatus.OK
         except IllegalContentError as err:
             return jsonify(message=err.message), HTTPStatus.FORBIDDEN
