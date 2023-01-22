@@ -26,7 +26,7 @@ LANGUAGE_MODEL_PARAMS = {
 
 ENGLISH_TO_ORIGINAL_LANGUAGE_MODEL_PARAMS = {
     'model' : 'text-davinci-003',
-    'temperature' : 0.3,
+    'temperature' : 0,
     'max_tokens' : 1024
 }
 

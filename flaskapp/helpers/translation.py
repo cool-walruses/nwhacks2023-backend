@@ -59,7 +59,7 @@ def generate_language_translation_prompt(source_language, prompt):
 
 def generate_code_language_translation_prompt(source_language, prompt):
     return "\n".join([
-        f"Translate the comments, and variables into {source_language}:\n",
+        f"Translate the comments, and variables into {source_language}, keep the code in English:\n",
         f"{prompt}"
     ])
 
