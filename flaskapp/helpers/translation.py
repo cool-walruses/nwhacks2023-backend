@@ -3,7 +3,7 @@ import flaskapp.helpers.constants as const
 from flaskapp.helpers.exceptions import IllegalContentError
 
 def generate_response(programming_language, prompt):
-    too_long_boolean = False
+    too_long_boolean = True
 
     # Check for abusive content
     content_check(prompt)
@@ -34,13 +34,11 @@ def generate_response(programming_language, prompt):
 
     current_text = ""
     too_long = "\nThe code you are trying to generate is too long. Please break it down into simpler tasks or try again.\n"
-    for i in range(3):
-        current_text = current_text + response["choices"][i]["text"]
+    for i in range(5):
         if response["choices"][i]["finish_reason"] == "stop":
+            current_text = response["choices"][i]["text"]
+            too_long_boolean = False
             break
-    if response["choices"][2]["finish_reason"] == "length":
-        current_text = too_long
-        too_long_boolean = True
 
     # Translate back to original language if needed
     if source_language != 'English':
@@ -55,11 +53,7 @@ def generate_response(programming_language, prompt):
                 prompt=generate_code_language_translation_prompt(source_language, current_text + "\n"),
                 **const.ENGLISH_TO_ORIGINAL_LANGUAGE_MODEL_PARAMS
             )
-            current_text = ""
-            for i in range(5):
-                current_text = current_text + response["choices"][0]["text"]
-                if response["choices"][i]["finish_reason"] == "stop":
-                    break
+            current_text = response["choices"][0]["text"]
 
     return current_text
 
