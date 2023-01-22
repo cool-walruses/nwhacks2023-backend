@@ -34,7 +34,7 @@ def generate_response(programming_language, prompt):
 
     current_text = ""
     too_long = "\nThe code you are trying to generate is too long. Please break it down into simpler tasks or try again.\n"
-    for i in range(5):
+    for i in range(3):
         if response["choices"][i]["finish_reason"] == "stop":
             current_text = response["choices"][i]["text"]
             too_long_boolean = False

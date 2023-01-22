@@ -16,7 +16,7 @@ CODEX_MODEL_PARAMS = {
     'model' : 'code-cushman-001',
     'temperature' : 0.2,
     'max_tokens' : 1900,
-    'n' : 6
+    'n' : 4
 }
 
 LANGUAGE_MODEL_PARAMS = {
