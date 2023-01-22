@@ -3,7 +3,7 @@ import flaskapp.helpers.constants as const
 from flaskapp.helpers.exceptions import IllegalContentError
 
 def generate_response(programming_language, prompt):
-    too_long = False;
+    too_long_boolean = False
 
     # Check for abusive content
     content_check(prompt)
@@ -38,6 +38,7 @@ def generate_response(programming_language, prompt):
         current_text = current_text + response["choices"][i]["text"]
         if i == 1 and (response["choices"][i]["finish_reason"] == "length"):
             current_text = current_text + too_long
+            too_long_boolean = True
 
     # Translate back to original language if needed
     if source_language != 'English':
@@ -48,7 +49,7 @@ def generate_response(programming_language, prompt):
         current_text = ""
         for i in range(2):
             current_text = current_text + response["choices"][i]["text"]
-        if too_long:
+        if too_long_boolean:
             response = openai.Completion.create(
                 prompt=generate_language_translation_prompt(source_language, too_long),
                 **const.ENGLISH_TO_ORIGINAL_LANGUAGE_MODEL_PARAMS
