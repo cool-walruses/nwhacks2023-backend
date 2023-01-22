@@ -36,9 +36,11 @@ def generate_response(programming_language, prompt):
     too_long = "\nThe code you are trying to generate is too long. Please break it down into simpler tasks.\n"
     for i in range(2):
         current_text = current_text + response["choices"][i]["text"]
-        if i == 1 and (response["choices"][i]["finish_reason"] == "length"):
-            current_text = current_text + too_long
-            too_long_boolean = True
+        if response["choices"][i]["finish_reason"] == "stop":
+            break;
+    if response["choices"][1]["finish_reason"] == "length":
+        current_text = current_text + too_long
+        too_long_boolean = True
 
     # Translate back to original language if needed
     if source_language != 'English':
@@ -49,6 +51,8 @@ def generate_response(programming_language, prompt):
         current_text = ""
         for i in range(2):
             current_text = current_text + response["choices"][i]["text"]
+            if response["choices"][i]["finish_reason"] == "stop":
+                break;
         if too_long_boolean:
             response = openai.Completion.create(
                 prompt=generate_language_translation_prompt(source_language, too_long),
