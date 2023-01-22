@@ -2,10 +2,17 @@ import openai
 import flaskapp.helpers.constants as const
 from flaskapp.helpers.exceptions import IllegalContentError
 
-def generate_response(programming_language, source_language, prompt):
+def generate_response(programming_language, prompt):
 
     # Check for abusive content
     content_check(prompt)
+
+    # Detect the language in the prompt
+    response = openai.Completion.create(
+        prompt=generate_language_detection_prompt(prompt),
+        **const.LANGUAGE_MODEL_PARAMS
+    )
+    source_language = response["choices"][0]["text"].strip().title()
 
     # Translate from source language
     if source_language != 'English':
@@ -13,7 +20,7 @@ def generate_response(programming_language, source_language, prompt):
             prompt=generate_language_translation_prompt(source_language, prompt),
             **const.LANGUAGE_MODEL_PARAMS
         )
-        prompt = response["choices"][0]["text"]
+        prompt = response["choices"][0]["text"].strip()
 
         # Double check for abusive content after translation
         content_check(prompt)
@@ -38,6 +45,11 @@ def content_check(prompt):
     if response["results"][0]["flagged"]:
         raise IllegalContentError(response_obj=response)
 
+def generate_language_detection_prompt(prompt):
+    return "\n".join([
+        f"What language is the following text in:",
+        f"{prompt}"
+    ])
 
 def generate_language_translation_prompt(source_language, prompt):
     return "\n".join([

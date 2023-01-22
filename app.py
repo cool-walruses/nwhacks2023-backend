@@ -1,6 +1,7 @@
 import os
 import openai
 from flask import Flask
+from flask_cors import CORS
 
 def create_app(test_config=None):
     # create and configure the app
@@ -18,5 +19,6 @@ def create_app(test_config=None):
     return app
 
 app = create_app()
+CORS(app)
 if __name__ == '__main__':
     app.run()

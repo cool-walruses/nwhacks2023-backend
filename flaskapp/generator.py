@@ -22,7 +22,6 @@ def generate():
             Body Data (Key : Datatype)
             ==========================
             programming_language : string
-            source_language : string
             prompt : string
 
         
@@ -44,12 +43,11 @@ def generate():
         """
         # Get information from request
         programming_language = request.json['programming_language'].title()
-        source_language = request.json['source_language'].title()
         prompt = request.json['prompt']
 
         try:
-            response = generate_response(programming_language, source_language, prompt)
-            code_content = response["choices"][0]["text"]
+            response = generate_response(programming_language, prompt)
+            code_content = response["choices"][0]["text"].strip()
             return jsonify(code=code_content), HTTPStatus.OK
         except IllegalContentError as err:
             return jsonify(message=err.message), HTTPStatus.FORBIDDEN
