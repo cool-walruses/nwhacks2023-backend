@@ -40,6 +40,11 @@ def generate_response(programming_language, prompt):
             too_long_boolean = False
             break
 
+    if too_long_boolean:
+        current_text = too_long
+
+    print(current_text)
+
     # Translate back to original language if needed
     if source_language != 'English':
         if too_long_boolean:
@@ -54,6 +59,8 @@ def generate_response(programming_language, prompt):
                 **const.ENGLISH_TO_ORIGINAL_LANGUAGE_MODEL_PARAMS
             )
             current_text = response["choices"][0]["text"]
+
+    print(current_text)
 
     return current_text
 
@@ -76,7 +83,7 @@ def generate_language_translation_prompt(source_language, prompt):
 
 def generate_code_language_translation_prompt(source_language, prompt):
     return "\n".join([
-        f"Translate the comments, and variables into {source_language}, keep the code in English:\n",
+        f"Keep the code in English, but translate the comments and variables into {source_language}:\n",
         f"{prompt}"
     ])
 
