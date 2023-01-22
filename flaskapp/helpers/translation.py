@@ -1,6 +1,7 @@
 import openai
 import flaskapp.helpers.constants as const
-from flaskapp.helpers.exceptions import IllegalContentError
+from flaskapp.helpers.exceptions import IllegalContentError, IllegalResponseError
+
 
 def generate_response(programming_language, prompt):
     too_long_boolean = True
@@ -29,7 +30,6 @@ def generate_response(programming_language, prompt):
         content_check(prompt)
 
     # Make request to openai API
-    too_long = "\nThe code you are trying to generate is too long. Please break it down into simpler tasks or try again.\n"
     current_text = ""
     while currentRun < MAXRUN:
         response = openai.Completion.create(
@@ -43,22 +43,15 @@ def generate_response(programming_language, prompt):
         currentRun = currentRun + 1
 
     if too_long_boolean:
-        current_text = too_long
+        raise IllegalResponseError()
 
     # Translate back to original language if needed
     if source_language != 'English':
-        if too_long_boolean:
-            response = openai.Completion.create(
-                prompt=generate_code_language_translation_prompt(source_language, too_long),
-                **const.ENGLISH_TO_ORIGINAL_LANGUAGE_MODEL_PARAMS
-            )
-            current_text = response["choices"][0]["text"]
-        else:
-            response = openai.Completion.create(
-                prompt=generate_code_language_translation_prompt(source_language, current_text + "\n"),
-                **const.ENGLISH_TO_ORIGINAL_LANGUAGE_MODEL_PARAMS
-            )
-            current_text = response["choices"][0]["text"]
+        response = openai.Completion.create(
+            prompt=generate_code_language_translation_prompt(source_language, current_text + "\n"),
+            **const.ENGLISH_TO_ORIGINAL_LANGUAGE_MODEL_PARAMS
+        )
+        current_text = response["choices"][0]["text"]
 
     return current_text
 

@@ -19,3 +19,19 @@ class IllegalContentError(Exception):
             "Refer to OpenAI's content policy: https://beta.openai.com/docs/usage-policies/content-policy"
 
         return message
+
+
+class IllegalResponseError(Exception):
+    def __init__(self):
+        self.__message = self.__create_message()
+        super().__init__(self.__message)
+
+    @property
+    def message(self):
+        return self.__message
+
+    def __create_message(self):
+        message = "\nEither the request is invalid or the request generates code that is too long.\n" \
+               "Please try again by entering a valid response or breaking it down to simpler tasks.\n"
+
+        return message

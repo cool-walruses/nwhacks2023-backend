@@ -1,7 +1,7 @@
 import openai
 import flaskapp.helpers.constants as const
 from flaskapp.helpers.translation import generate_response
-from flaskapp.helpers.exceptions import IllegalContentError
+from flaskapp.helpers.exceptions import IllegalContentError, IllegalResponseError
 from http import HTTPStatus
 from flask import Blueprint, jsonify, request
 from flask_cors import cross_origin
@@ -51,5 +51,5 @@ def generate():
             response = generate_response(programming_language, prompt)
             code_content = response.strip()
             return jsonify(code=code_content), HTTPStatus.OK
-        except IllegalContentError as err:
+        except (IllegalContentError, IllegalResponseError) as err:
             return jsonify(message=err.message), HTTPStatus.FORBIDDEN
