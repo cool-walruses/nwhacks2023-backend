@@ -24,6 +24,12 @@ LANGUAGE_MODEL_PARAMS = {
     'max_tokens' : 1024
 }
 
+ENGLISH_TO_ORIGINAL_LANGUAGE_MODEL_PARAMS = {
+    'model' : 'text-davinci-003',
+    'temperature' : 0.3,
+    'max_tokens' : 1024
+}
+
 LANG_COMMENTS = {
     "Python" : CommentWrapper('"""', '"""'),
     "Java" : CommentWrapper('/*', '*/'),

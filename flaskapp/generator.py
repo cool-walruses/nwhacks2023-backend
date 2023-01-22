@@ -54,13 +54,28 @@ def generate():
             **const.CODEX_MODEL_PARAMS
         )
 
+        # Translate back to original language if needed
+        if source_language != 'English':
+            response = openai.Completion.create(
+                prompt=generate_code_language_translation_prompt(source_language, response["choices"][0]["text"]),
+                **const.ENGLISH_TO_ORIGINAL_LANGUAGE_MODEL_PARAMS
+            )
+
         code_content = response["choices"][0]["text"]
+        print(code_content)
+
         #code_content = bytes(response["choices"][0]["text"], "utf-8").decode('unicode_escape')
         return jsonify(code=code_content), HTTPStatus.OK
 
 def generate_language_translation_prompt(source_language, prompt):
     return "\n".join([
         f"Translate the following from {source_language} to English:",
+        f"{prompt}"
+    ])
+
+def generate_code_language_translation_prompt(source_language, prompt):
+    return "\n".join([
+        f"Translate the comments, and variables into {source_language} \n",
         f"{prompt}"
     ])
 
