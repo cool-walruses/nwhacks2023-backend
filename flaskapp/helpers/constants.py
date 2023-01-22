@@ -14,23 +14,23 @@ class CommentWrapper:
 
 CODEX_MODEL_PARAMS = {
     'model' : 'code-cushman-001',
-    'temperature' : 0.6,
+    'temperature' : 0.2,
     'max_tokens' : 1024,
-    'n' : 2
+    'n' : 3
 }
 
 LANGUAGE_MODEL_PARAMS = {
     'model' : 'text-davinci-003',
     'temperature' : 0.6,
     'max_tokens' : 1024,
-    'n' : 2
 }
 
 ENGLISH_TO_ORIGINAL_LANGUAGE_MODEL_PARAMS = {
     'model' : 'text-davinci-003',
     'temperature' : 0,
     'max_tokens' : 1024,
-    'n' : 2
+    'n' : 6,
+    'frequency_penalty' : 0.1
 }
 
 LANG_COMMENTS = {

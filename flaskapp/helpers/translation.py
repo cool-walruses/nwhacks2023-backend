@@ -33,32 +33,33 @@ def generate_response(programming_language, prompt):
     )
 
     current_text = ""
-    too_long = "\nThe code you are trying to generate is too long. Please break it down into simpler tasks.\n"
-    for i in range(2):
+    too_long = "\nThe code you are trying to generate is too long. Please break it down into simpler tasks or try again.\n"
+    for i in range(3):
         current_text = current_text + response["choices"][i]["text"]
         if response["choices"][i]["finish_reason"] == "stop":
-            break;
-    if response["choices"][1]["finish_reason"] == "length":
-        current_text = current_text + too_long
+            break
+    if response["choices"][2]["finish_reason"] == "length":
+        current_text = too_long
         too_long_boolean = True
 
     # Translate back to original language if needed
     if source_language != 'English':
-        response = openai.Completion.create(
-            prompt=generate_code_language_translation_prompt(source_language, current_text),
-            **const.ENGLISH_TO_ORIGINAL_LANGUAGE_MODEL_PARAMS
-        )
-        current_text = ""
-        for i in range(2):
-            current_text = current_text + response["choices"][i]["text"]
-            if response["choices"][i]["finish_reason"] == "stop":
-                break;
         if too_long_boolean:
             response = openai.Completion.create(
-                prompt=generate_language_translation_prompt(source_language, too_long),
+                prompt=generate_code_language_translation_prompt(source_language, too_long),
                 **const.ENGLISH_TO_ORIGINAL_LANGUAGE_MODEL_PARAMS
             )
-            current_text = current_text + response["choices"][0]["text"]
+            current_text = response["choices"][0]["text"]
+        else:
+            response = openai.Completion.create(
+                prompt=generate_code_language_translation_prompt(source_language, current_text + "\n"),
+                **const.ENGLISH_TO_ORIGINAL_LANGUAGE_MODEL_PARAMS
+            )
+            current_text = ""
+            for i in range(5):
+                current_text = current_text + response["choices"][0]["text"]
+                if response["choices"][i]["finish_reason"] == "stop":
+                    break
 
     return current_text
 
